@@ -1,27 +1,30 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
+import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
-public class SendCommand implements VelocityUtilsCommand {
-
-    private final ProxyServer server;
+public class SendCommand extends VelocityUtilsCommand {
 
     public SendCommand(ProxyServer server) {
-        this.server = server;
+        super(server);
     }
 
     @Override
-    public void execute(Invocation invocation) {
+    public void execute(SimpleCommand.Invocation invocation) {
         CommandSource source = invocation.source();
         String[] arguments = invocation.arguments();
 
@@ -48,20 +51,19 @@ public class SendCommand implements VelocityUtilsCommand {
         ChatUtil.sendMessage(source, String.format("&2Attempting to send %d player%s to the server %s", selectedPlayer.size(), selectedPlayer.size() == 1 ? "" : "s", toServerName));
 
         for (Player player : selectedPlayer) {
-            Optional<ServerConnection> currentServer = player.getCurrentServer();
-            if (currentServer.isPresent() && currentServer.get().getServer() != toServer.get()) {
+            if (!PlayerUtil.inServer(player, toServer.get())) {
                 player.createConnectionRequest(toServer.get()).fireAndForget();
             }
         }
     }
 
     @Override
-    public boolean hasPermission(Invocation invocation) {
-        return invocation.source().hasPermission("velocityutils.send");
+    protected String getPermission() {
+        return "velocityutils.send";
     }
 
     @Override
-    public List<String> suggest(Invocation invocation) {
+    public List<String> suggest(SimpleCommand.Invocation invocation) {
         String[] arguments = invocation.arguments();
 
         if (arguments.length <= 1) {
@@ -71,23 +73,23 @@ public class SendCommand implements VelocityUtilsCommand {
             return this.getSuggestions(arguments[1], false);
         }
 
-        return Collections.emptyList();
+        return super.suggest(invocation);
     }
 
     private List<Player> parseFromLocation(String location) {
         if (location.equals("@a")) {
             return new ArrayList<>(this.server.getAllPlayers());
         } else if (location.startsWith("#")) {
-            RegisteredServer server = this.getServer(location.substring(1));
+            Optional<RegisteredServer> server = this.server.getServer(location.substring(1));
 
-            if (server != null) {
-                return new ArrayList<>(server.getPlayersConnected());
+            if (server.isPresent()) {
+                return new ArrayList<>(server.get().getPlayersConnected());
             }
         } else {
-            Player player = this.getPlayer(location);
+            Optional<Player> player = this.server.getPlayer(location);
 
-            if (player != null) {
-                return Collections.singletonList(player);
+            if (player.isPresent()) {
+                return Collections.singletonList(player.get());
             }
         }
 
@@ -96,16 +98,12 @@ public class SendCommand implements VelocityUtilsCommand {
 
     private Optional<RegisteredServer> parseToLocation(String location) {
         if (location.startsWith("#")) {
-            RegisteredServer server = this.getServer(location.substring(1));
-
-            if (server != null) {
-                return Optional.of(server);
-            }
+            return this.server.getServer(location.substring(1));
         } else {
-            Player player = this.getPlayer(location);
+            Optional<Player> player = this.server.getPlayer(location);
 
-            if (player != null) {
-                Optional<ServerConnection> server = player.getCurrentServer();
+            if (player.isPresent()) {
+                Optional<ServerConnection> server = player.get().getCurrentServer();
                 if (server.isPresent()) {
                     return Optional.of(server.get().getServer());
                 }
@@ -115,21 +113,13 @@ public class SendCommand implements VelocityUtilsCommand {
         return Optional.empty();
     }
 
-    private RegisteredServer getServer(String name) {
-        return this.server.getServer(name).orElse(null);
-    }
-
-    private Player getPlayer(String username) {
-        return this.server.getPlayer(username).orElse(null);
-    }
-
     private List<String> getSuggestions(String argument, boolean showAll) {
         List<String> suggestions = new ArrayList<>();
 
         if (showAll) {
             suggestions.add("@a");
         }
-        suggestions.addAll(SuggestionUtil.getServers(this.server));
+        suggestions.addAll(SuggestionUtil.getServers(this.server, "#"));
         suggestions.addAll(SuggestionUtil.getPlayers(this.server));
 
         return SuggestionUtil.filterSuggestions(argument, suggestions);

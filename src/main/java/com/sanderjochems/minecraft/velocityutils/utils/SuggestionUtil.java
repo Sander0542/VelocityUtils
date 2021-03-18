@@ -34,7 +34,17 @@ public class SuggestionUtil {
         List<String> servers = new ArrayList<>();
 
         for (RegisteredServer server : proxyServer.getAllServers()) {
-            servers.add("#" + server.getServerInfo().getName());
+            servers.add(server.getServerInfo().getName());
+        }
+
+        return servers;
+    }
+
+    public static List<String> getServers(ProxyServer proxyServer, String prefix) {
+        List<String> servers = new ArrayList<>();
+
+        for (String server : getServers(proxyServer)) {
+            servers.add(prefix + server);
         }
 
         return servers;

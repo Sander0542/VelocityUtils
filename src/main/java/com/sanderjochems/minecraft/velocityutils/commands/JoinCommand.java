@@ -1,10 +1,11 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
+import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.command.CommandMeta;
-import com.velocitypowered.api.command.SimpleCommand;
+import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
@@ -12,14 +13,18 @@ import com.velocitypowered.api.proxy.ServerConnection;
 import java.util.List;
 import java.util.Optional;
 
-public class FindCommand extends PlayerCommand {
+public class JoinCommand extends PlayerCommand {
 
-    public FindCommand(ProxyServer server) {
+    public JoinCommand(ProxyServer server) {
         super(server);
     }
 
     @Override
-    public void execute(SimpleCommand.Invocation invocation, Player player) {
+    public void execute(Invocation invocation, Player player) {
+        if (!(invocation.source() instanceof Player)) {
+            ChatUtil.sendMessage(invocation.source(), "&cOnly players can use this command");
+        }
+
         Optional<ServerConnection> server = player.getCurrentServer();
 
         if (!server.isPresent()) {
@@ -27,18 +32,23 @@ public class FindCommand extends PlayerCommand {
             return;
         }
 
-        String serverName = server.get().getServer().getServerInfo().getName();
+        Player executor = (Player) invocation.source();
 
-        ChatUtil.sendMessage(invocation.source(), String.format("&a%s was found %s", player.getUsername(), serverName));
+        if (PlayerUtil.inServer(executor, server.get())) {
+            ChatUtil.sendMessage(invocation.source(), String.format("&cYou are in the same server as %s", player.getUsername()));
+            return;
+        }
+
+        executor.createConnectionRequest(server.get().getServer()).fireAndForget();
     }
 
     @Override
-    public String getPermission() {
-        return "velocityutils.find";
+    protected String getPermission() {
+        return "velocityutils.join";
     }
 
     @Override
     public CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("find").build();
+        return commandManager.metaBuilder("join").build();
     }
 }
