@@ -1,21 +1,20 @@
-package com.sanderjochems.minecraft.velocityutils.commands;
+package com.sanderjochems.minecraft.velocityutils.commands.common;
 
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
 import com.velocitypowered.api.command.CommandSource;
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
 
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ServerCommand extends VelocityUtilsCommand {
+public abstract class ServerCommand extends Command {
     public ServerCommand(ProxyServer server) {
         super(server);
     }
 
-    abstract void execute(Invocation invocation, RegisteredServer server);
+    protected abstract void execute(Invocation invocation, RegisteredServer server);
 
     @Override
     public void execute(Invocation invocation) {

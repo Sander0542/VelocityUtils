@@ -1,13 +1,12 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
-import com.velocitypowered.api.command.CommandManager;
-import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-public class AlertCommand extends VelocityUtilsCommand {
+public class AlertCommand extends Command {
 
     public AlertCommand(ProxyServer server) {
         super(server);
@@ -31,7 +30,12 @@ public class AlertCommand extends VelocityUtilsCommand {
     }
 
     @Override
-    protected CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("alert").build();
+    public String getCommand() {
+        return "alert";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Send an alert to all the players on the server";
     }
 }

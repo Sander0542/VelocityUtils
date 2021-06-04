@@ -1,16 +1,13 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
-import com.velocitypowered.api.command.CommandManager;
-import com.velocitypowered.api.command.CommandMeta;
-import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
-import com.velocitypowered.api.proxy.server.RegisteredServer;
-import com.velocitypowered.api.proxy.server.ServerInfo;
 
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-public class ProxyInfoCommand extends VelocityUtilsCommand {
+public class ProxyInfoCommand extends Command {
 
     public ProxyInfoCommand(ProxyServer server) {
         super(server);
@@ -39,7 +36,12 @@ public class ProxyInfoCommand extends VelocityUtilsCommand {
     }
 
     @Override
-    protected CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("proxyinfo").build();
+    public String getCommand() {
+        return "proxyinfo";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show information about the proxy server";
     }
 }

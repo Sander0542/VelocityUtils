@@ -3,7 +3,6 @@ package com.sanderjochems.minecraft.velocityutils.utils;
 import com.velocitypowered.api.command.CommandSource;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class ChatUtil {

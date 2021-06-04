@@ -1,16 +1,12 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
-import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
-import com.velocitypowered.api.command.CommandManager;
-import com.velocitypowered.api.command.CommandMeta;
-import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.ServerConnection;
 
-import java.util.List;
 import java.util.Optional;
 
 public class JoinCommand extends PlayerCommand {
@@ -48,7 +44,12 @@ public class JoinCommand extends PlayerCommand {
     }
 
     @Override
-    public CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("join").build();
+    public String getCommand() {
+        return "join";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Send yourself to the server of a given player";
     }
 }

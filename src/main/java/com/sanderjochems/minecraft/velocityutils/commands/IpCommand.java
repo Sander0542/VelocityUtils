@@ -1,8 +1,7 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
-import com.velocitypowered.api.command.CommandManager;
-import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
@@ -24,7 +23,12 @@ public class IpCommand extends PlayerCommand {
     }
 
     @Override
-    public CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("ip").build();
+    public String getCommand() {
+        return "ip";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Show the ip address of a given player";
     }
 }

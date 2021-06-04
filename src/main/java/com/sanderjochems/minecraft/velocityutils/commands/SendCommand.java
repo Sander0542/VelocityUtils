@@ -1,10 +1,9 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
-import com.velocitypowered.api.command.CommandManager;
-import com.velocitypowered.api.command.CommandMeta;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -17,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class SendCommand extends VelocityUtilsCommand {
+public class SendCommand extends Command {
 
     public SendCommand(ProxyServer server) {
         super(server);
@@ -60,6 +59,16 @@ public class SendCommand extends VelocityUtilsCommand {
     @Override
     protected String getPermission() {
         return "velocityutils.send";
+    }
+
+    @Override
+    public String getCommand() {
+        return "send";
+    }
+
+    @Override
+    public String getDescription() {
+        return "Send a given player or group to another server of player";
     }
 
     @Override
@@ -113,6 +122,13 @@ public class SendCommand extends VelocityUtilsCommand {
         return Optional.empty();
     }
 
+    @Override
+    protected String[] getAliases() {
+        return new String[]{
+                "vtp"
+        };
+    }
+
     private List<String> getSuggestions(String argument, boolean showAll) {
         List<String> suggestions = new ArrayList<>();
 
@@ -123,10 +139,5 @@ public class SendCommand extends VelocityUtilsCommand {
         suggestions.addAll(SuggestionUtil.getPlayers(this.server));
 
         return SuggestionUtil.filterSuggestions(argument, suggestions);
-    }
-
-    @Override
-    public CommandMeta getMeta(CommandManager commandManager) {
-        return commandManager.metaBuilder("send").build();
     }
 }

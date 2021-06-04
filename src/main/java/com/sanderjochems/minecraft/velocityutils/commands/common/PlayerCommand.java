@@ -1,4 +1,4 @@
-package com.sanderjochems.minecraft.velocityutils.commands;
+package com.sanderjochems.minecraft.velocityutils.commands.common;
 
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
@@ -10,12 +10,12 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class PlayerCommand extends VelocityUtilsCommand {
+public abstract class PlayerCommand extends Command {
     public PlayerCommand(ProxyServer server) {
         super(server);
     }
 
-    abstract void execute(SimpleCommand.Invocation invocation, Player player);
+    public abstract void execute(SimpleCommand.Invocation invocation, Player player);
 
     @Override
     public void execute(SimpleCommand.Invocation invocation) {
