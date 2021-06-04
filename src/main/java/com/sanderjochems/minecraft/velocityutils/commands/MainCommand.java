@@ -19,8 +19,12 @@ public class MainCommand extends Command {
         Map<String, String> commandHelp = new LinkedHashMap<>();
 
         for (Command command : VelocityUtils.getInstance().getCommands()) {
-            commandHelp.put(String.format("/%s", command.getCommand()), command.getDescription());
+            if (command.hasPermission(invocation)) {
+                commandHelp.put(String.format("/%s", command.getCommand()), command.getDescription());
+            }
         }
+
+        if (commandHelp.isEmpty()) return;
 
         ChatUtil.sendList(invocation.source(), "VelocityUtils Help", commandHelp);
     }
