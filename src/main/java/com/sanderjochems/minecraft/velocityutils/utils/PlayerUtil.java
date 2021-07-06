@@ -15,10 +15,7 @@ public class PlayerUtil {
     public static boolean inServer(Player player, RegisteredServer server) {
         Optional<ServerConnection> playerServer = player.getCurrentServer();
 
-        if (!playerServer.isPresent()) {
-            return false;
-        }
+        return playerServer.filter(serverConnection -> serverConnection.getServer() == server).isPresent();
 
-        return playerServer.get().getServer() == server;
     }
 }
