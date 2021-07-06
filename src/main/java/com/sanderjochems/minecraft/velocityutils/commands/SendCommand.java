@@ -1,6 +1,6 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
+import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
@@ -16,7 +16,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-public class SendCommand extends Command {
+public class SendCommand extends BaseCommand {
 
     public SendCommand(ProxyServer server) {
         super(server);

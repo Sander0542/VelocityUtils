@@ -10,8 +10,8 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class PlayerCommand extends Command {
-    public PlayerCommand(ProxyServer server) {
+public abstract class PlayerBaseCommand extends BaseCommand {
+    public PlayerBaseCommand(ProxyServer server) {
         super(server);
     }
 

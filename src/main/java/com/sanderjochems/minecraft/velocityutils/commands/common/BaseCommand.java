@@ -8,11 +8,11 @@ import com.velocitypowered.api.proxy.ProxyServer;
 import java.util.Collections;
 import java.util.List;
 
-public abstract class Command implements SimpleCommand {
+public abstract class BaseCommand implements SimpleCommand {
 
     protected final ProxyServer server;
 
-    public Command(ProxyServer server) {
+    public BaseCommand(ProxyServer server) {
         this.server = server;
     }
 

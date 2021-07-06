@@ -1,6 +1,6 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.ServerCommand;
+import com.sanderjochems.minecraft.velocityutils.commands.common.ServerBaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.server.RegisteredServer;
@@ -9,7 +9,7 @@ import com.velocitypowered.api.proxy.server.ServerInfo;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ServerInfoCommand extends ServerCommand {
+public class ServerInfoCommand extends ServerBaseCommand {
 
     public ServerInfoCommand(ProxyServer server) {
         super(server);

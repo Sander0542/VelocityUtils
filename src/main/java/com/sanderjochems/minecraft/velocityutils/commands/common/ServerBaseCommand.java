@@ -9,8 +9,8 @@ import com.velocitypowered.api.proxy.server.RegisteredServer;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class ServerCommand extends Command {
-    public ServerCommand(ProxyServer server) {
+public abstract class ServerBaseCommand extends BaseCommand {
+    public ServerBaseCommand(ProxyServer server) {
         super(server);
     }
 

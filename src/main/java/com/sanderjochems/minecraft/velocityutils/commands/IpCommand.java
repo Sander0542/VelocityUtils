@@ -1,12 +1,12 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerCommand;
+import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerBaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-public class IpCommand extends PlayerCommand {
+public class IpCommand extends PlayerBaseCommand {
 
     public IpCommand(ProxyServer server) {
         super(server);

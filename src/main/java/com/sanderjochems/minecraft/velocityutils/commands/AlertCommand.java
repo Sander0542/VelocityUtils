@@ -1,12 +1,12 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
+import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-public class AlertCommand extends Command {
+public class AlertCommand extends BaseCommand {
 
     public AlertCommand(ProxyServer server) {
         super(server);

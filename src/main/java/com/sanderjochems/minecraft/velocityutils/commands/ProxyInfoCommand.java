@@ -1,13 +1,13 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
+import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class ProxyInfoCommand extends Command {
+public class ProxyInfoCommand extends BaseCommand {
 
     public ProxyInfoCommand(ProxyServer server) {
         super(server);

@@ -1,6 +1,6 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerCommand;
+import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerBaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.sanderjochems.minecraft.velocityutils.utils.PlayerUtil;
 import com.velocitypowered.api.proxy.Player;
@@ -9,7 +9,7 @@ import com.velocitypowered.api.proxy.ServerConnection;
 
 import java.util.Optional;
 
-public class JoinCommand extends PlayerCommand {
+public class JoinCommand extends PlayerBaseCommand {
 
     public JoinCommand(ProxyServer server) {
         super(server);

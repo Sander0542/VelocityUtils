@@ -2,7 +2,7 @@ package com.sanderjochems.minecraft.velocityutils;
 
 import com.google.inject.Inject;
 import com.sanderjochems.minecraft.velocityutils.commands.*;
-import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
+import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -28,7 +28,7 @@ public class VelocityUtils {
     private final ProxyServer server;
     private final Logger logger;
     private final Metrics.Factory metricsFactory;
-    private final List<Command> commands = new ArrayList<>();
+    private final List<BaseCommand> commands = new ArrayList<>();
 
     private static final int BStatsPluginId = 11571;
 
@@ -52,7 +52,7 @@ public class VelocityUtils {
         Metrics metrics = this.metricsFactory.make(this, BStatsPluginId);
     }
 
-    public List<Command> getCommands() {
+    public List<BaseCommand> getCommands() {
         return this.commands;
     }
 
@@ -66,7 +66,7 @@ public class VelocityUtils {
         this.commands.add(new ServerInfoCommand(VelocityUtils.this.server));
         this.commands.add(new MainCommand(VelocityUtils.this.server));
 
-        for (Command command : this.commands) {
+        for (BaseCommand command : this.commands) {
             command.register(commandManager);
         }
     }

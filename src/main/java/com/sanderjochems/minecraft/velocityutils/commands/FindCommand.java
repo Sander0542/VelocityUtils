@@ -1,6 +1,6 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
-import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerCommand;
+import com.sanderjochems.minecraft.velocityutils.commands.common.PlayerBaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
@@ -9,7 +9,7 @@ import com.velocitypowered.api.proxy.ServerConnection;
 
 import java.util.Optional;
 
-public class FindCommand extends PlayerCommand {
+public class FindCommand extends PlayerBaseCommand {
 
     public FindCommand(ProxyServer server) {
         super(server);

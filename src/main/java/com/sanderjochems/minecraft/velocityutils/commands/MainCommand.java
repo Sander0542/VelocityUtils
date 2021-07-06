@@ -1,14 +1,14 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
 import com.sanderjochems.minecraft.velocityutils.VelocityUtils;
-import com.sanderjochems.minecraft.velocityutils.commands.common.Command;
+import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
 import com.velocitypowered.api.proxy.ProxyServer;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class MainCommand extends Command {
+public class MainCommand extends BaseCommand {
 
     public MainCommand(ProxyServer server) {
         super(server);
@@ -18,7 +18,7 @@ public class MainCommand extends Command {
     public void execute(Invocation invocation) {
         Map<String, String> commandHelp = new LinkedHashMap<>();
 
-        for (Command command : VelocityUtils.getInstance().getCommands()) {
+        for (BaseCommand command : VelocityUtils.getInstance().getCommands()) {
             if (command.hasPermission(invocation)) {
                 commandHelp.put(String.format("/%s", command.getCommand()), command.getDescription());
             }
