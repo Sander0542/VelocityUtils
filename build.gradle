@@ -7,8 +7,8 @@ String packagePath = 'com.sanderjochems.minecraft'
 group = packagePath
 version = '1.0-SNAPSHOT'
 
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
+sourceCompatibility = '1.11'
+targetCompatibility = '1.11'
 
 repositories {
     mavenCentral()
@@ -27,9 +27,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.velocitypowered:velocity-api:1.1.0'
+    compileOnly 'com.velocitypowered:velocity-api:3.0.0'
     implementation 'org.bstats:bstats-velocity:2.2.1'
-    annotationProcessor 'com.velocitypowered:velocity-api:1.1.0'
+    annotationProcessor 'com.velocitypowered:velocity-api:3.0.0'
 }
 
 shadowJar {
