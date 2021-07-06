@@ -1,11 +1,27 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
+    id 'me.qoomon.git-versioning' version '4.2.0'
 }
 
 String packagePath = 'com.sanderjochems.minecraft'
 group = packagePath
-version = '1.0-SNAPSHOT'
+version = '0.0.0'
+
+gitVersioning.apply {
+    branch {
+        pattern = 'main'
+        versionFormat = '${version}-${commit.short}${dirty}'
+    }
+    branch {
+        pattern = 'dev'
+        versionFormat = '${version}-${branch.slug}-${commit.short}${dirty}'
+    }
+    tag {
+        pattern = 'v(?<tagVersion>[0-9].*)'
+        versionFormat = '${tagVersion}'
+    }
+}
 
 sourceCompatibility = '1.11'
 targetCompatibility = '1.11'
