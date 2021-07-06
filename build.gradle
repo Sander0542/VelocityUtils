@@ -52,6 +52,7 @@ shadowJar {
     dependencies {
         relocate('org.bstats', packagePath + '.dependencies.bstats')
     }
+    archiveClassifier.set('')
 }
 
 import org.apache.tools.ant.filters.ReplaceTokens
