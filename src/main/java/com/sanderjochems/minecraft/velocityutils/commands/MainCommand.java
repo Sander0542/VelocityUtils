@@ -1,5 +1,6 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.Constants;
 import com.sanderjochems.minecraft.velocityutils.VelocityUtils;
 import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
@@ -17,6 +18,7 @@ public class MainCommand extends BaseCommand {
     private static final String PREFIX_PERMISSION = "velocityutils.";
 
     private static final String SUB_HELP = "help";
+    private static final String SUB_VERSION = "version";
 
     public MainCommand(ProxyServer server) {
         super(server);
@@ -34,6 +36,9 @@ public class MainCommand extends BaseCommand {
         switch (arguments[0]) {
             case SUB_HELP:
                 ChatUtil.sendHelp(invocation);
+                return;
+            case SUB_VERSION:
+                this.sendVersion(invocation);
                 return;
         }
 
@@ -84,10 +89,22 @@ public class MainCommand extends BaseCommand {
     private List<String> getSubCommands(Invocation invocation) {
         List<String> subCommands = new ArrayList<>() {{
             this.add(SUB_HELP);
+            this.add(SUB_VERSION);
         }};
 
         subCommands.removeIf(subCommand -> !this.hasPermission(invocation, subCommand));
 
         return subCommands;
+    }
+
+    private void sendVersion(Invocation invocation) {
+        PluginDescription pluginDescription = VelocityUtils.getPlugin().getDescription();
+
+        Map<String, String> items = new HashMap<>() {{
+            this.put("Version", pluginDescription.getVersion().orElse("Unknown"));
+            this.put(pluginDescription.getAuthors().size() == 1 ? "Author" : "Authors", String.join(", ", pluginDescription.getAuthors()));
+        }};
+
+        ChatUtil.sendList(invocation.source(), String.format("%s Version", Constants.PluginName), items);
     }
 }
