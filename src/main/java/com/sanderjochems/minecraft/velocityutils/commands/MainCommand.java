@@ -1,14 +1,24 @@
 package com.sanderjochems.minecraft.velocityutils.commands;
 
+import com.sanderjochems.minecraft.velocityutils.Constants;
 import com.sanderjochems.minecraft.velocityutils.VelocityUtils;
 import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.utils.ChatUtil;
+import com.sanderjochems.minecraft.velocityutils.utils.SuggestionUtil;
+import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.ProxyServer;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MainCommand extends BaseCommand {
+
+    private static final String PREFIX_PERMISSION = "velocityutils.";
+
+    private static final String SUB_HELP = "help";
+    private static final String SUB_VERSION = "version";
 
     public MainCommand(ProxyServer server) {
         super(server);
@@ -16,17 +26,34 @@ public class MainCommand extends BaseCommand {
 
     @Override
     public void execute(Invocation invocation) {
-        Map<String, String> commandHelp = new LinkedHashMap<>();
+        String[] arguments = invocation.arguments();
 
-        for (BaseCommand command : VelocityUtils.getInstance().getCommands()) {
-            if (command.hasPermission(invocation)) {
-                commandHelp.put(String.format("/%s", command.getCommand()), command.getDescription());
-            }
+        if (arguments.length == 0) {
+            ChatUtil.sendHelp(invocation);
+            return;
         }
 
-        if (commandHelp.isEmpty()) return;
+        switch (arguments[0]) {
+            case SUB_HELP:
+                ChatUtil.sendHelp(invocation);
+                return;
+            case SUB_VERSION:
+                this.sendVersion(invocation);
+                return;
+        }
 
-        ChatUtil.sendList(invocation.source(), "VelocityUtils Help", commandHelp);
+        ChatUtil.sendMessage(invocation.source(), "Invalid subcommand");
+    }
+
+    @Override
+    public List<String> suggest(Invocation invocation) {
+        String[] arguments = invocation.arguments();
+
+        if (arguments.length <= 1) {
+            return SuggestionUtil.filterSuggestions(arguments.length > 0 ? arguments[0] : "", this.getSubCommands(invocation));
+        }
+
+        return super.suggest(invocation);
     }
 
     @Override
@@ -49,5 +76,35 @@ public class MainCommand extends BaseCommand {
     @Override
     public String getDescription() {
         return "Show the help page of the VelocityUtils plugin";
+    }
+
+    private boolean hasPermission(Invocation invocation, String subCommand) {
+        if (subCommand.equals(SUB_HELP)) {
+            return true;
+        }
+
+        return invocation.source().hasPermission(PREFIX_PERMISSION + subCommand);
+    }
+
+    private List<String> getSubCommands(Invocation invocation) {
+        List<String> subCommands = new ArrayList<>() {{
+            this.add(SUB_HELP);
+            this.add(SUB_VERSION);
+        }};
+
+        subCommands.removeIf(subCommand -> !this.hasPermission(invocation, subCommand));
+
+        return subCommands;
+    }
+
+    private void sendVersion(Invocation invocation) {
+        PluginDescription pluginDescription = VelocityUtils.getPlugin().getDescription();
+
+        Map<String, String> items = new HashMap<>() {{
+            this.put("Version", pluginDescription.getVersion().orElse("Unknown"));
+            this.put(pluginDescription.getAuthors().size() == 1 ? "Author" : "Authors", String.join(", ", pluginDescription.getAuthors()));
+        }};
+
+        ChatUtil.sendList(invocation.source(), String.format("%s Version", Constants.PluginName), items);
     }
 }

@@ -3,20 +3,30 @@ package com.sanderjochems.minecraft.velocityutils;
 import com.google.inject.Inject;
 import com.sanderjochems.minecraft.velocityutils.commands.*;
 import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
+import com.sanderjochems.minecraft.velocityutils.listeners.VersionCheckListener;
+import com.sanderjochems.minecraft.velocityutils.listeners.common.BaseListener;
+import com.sanderjochems.minecraft.velocityutils.tasks.VersionCheckerTask;
+import com.sanderjochems.minecraft.velocityutils.tasks.common.BaseTask;
 import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
+import com.velocitypowered.api.scheduler.Scheduler;
 import org.bstats.velocity.Metrics;
 import org.slf4j.Logger;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Plugin(
-        id = "velocity-utils",
-        name = "VelocityUtils",
+        id = Constants.PluginId,
+        name = Constants.PluginName,
         version = "@version@",
         description = "Useful utilities for a Velocity Minecraft server",
         url = "https://sanderjochems.com/",
@@ -29,27 +39,58 @@ public class VelocityUtils {
     private final Logger logger;
     private final Metrics.Factory metricsFactory;
     private final List<BaseCommand> commands = new ArrayList<>();
+    private final List<BaseListener> listeners = new ArrayList<>();
+    private final Map<BaseTask, Duration> tasks = new HashMap<>();
 
-    private static final int BStatsPluginId = 11571;
+    private String newestVersion = null;
 
     public static VelocityUtils getInstance() {
         return Instance;
     }
 
+    public static PluginContainer getPlugin() {
+        return getInstance().server.getPluginManager().getPlugin(Constants.PluginId).get();
+    }
+
+    public static Logger getLogger() {
+        return getInstance().logger;
+    }
+
     @Inject
-    public VelocityUtils(final ProxyServer server, final CommandManager commandManager, final Logger logger, Metrics.Factory metricsFactory) {
+    public VelocityUtils(final ProxyServer server, final Logger logger, Metrics.Factory metricsFactory) {
         Instance = this;
 
         this.server = server;
         this.logger = logger;
         this.metricsFactory = metricsFactory;
-
-        this.registerCommands(commandManager);
     }
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        Metrics metrics = this.metricsFactory.make(this, BStatsPluginId);
+        Metrics metrics = this.metricsFactory.make(this, Constants.BStatsPluginId);
+
+        this.registerCommands(this.server.getCommandManager());
+        this.registerListeners(this.server.getEventManager());
+        this.registerTasks(this.server.getScheduler());
+
+        this.logger.info("{} Enabled.", Constants.PluginName);
+        this.logger.info("{} Version {}", Constants.PluginName, this.getCurrentVersion());
+    }
+
+    public void setNewestVersion(String newestVersion) {
+        this.newestVersion = newestVersion;
+    }
+
+    public String getCurrentVersion() {
+        return getPlugin().getDescription().getVersion().orElse("Unknown");
+    }
+
+    public String getNewVersion() {
+        return this.newestVersion;
+    }
+
+    public boolean isNewerVersionAvailable() {
+        return !getPlugin().getDescription().getVersion().orElse("Unknown").equals(this.newestVersion);
     }
 
     public List<BaseCommand> getCommands() {
@@ -68,6 +109,30 @@ public class VelocityUtils {
 
         for (BaseCommand command : this.commands) {
             command.register(commandManager);
+        }
+    }
+
+    public List<BaseListener> getListeners() {
+        return this.listeners;
+    }
+
+    private void registerListeners(final EventManager eventManager) {
+        this.listeners.add(new VersionCheckListener(this.server));
+
+        for (BaseListener listener : this.listeners) {
+            eventManager.register(this, listener);
+        }
+    }
+
+    public Map<BaseTask, Duration> getTasks() {
+        return this.tasks;
+    }
+
+    private void registerTasks(final Scheduler scheduler) {
+        this.tasks.put(new VersionCheckerTask(this.server), Duration.ofMinutes(15));
+
+        for (Map.Entry<BaseTask, Duration> map : this.tasks.entrySet()) {
+            scheduler.buildTask(this, map.getKey()).repeat(map.getValue()).schedule();
         }
     }
 }
