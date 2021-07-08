@@ -10,6 +10,8 @@ import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import java.util.Map;
 
 public class ChatUtil {
+    public static final String ChatPrefix = String.format("&2[&a%s&2]&r ", Constants.PluginName);
+
     public static void sendMessage(CommandSource source, String message) {
         source.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
     }
@@ -35,5 +37,12 @@ public class ChatUtil {
 
     private static String formatItem(String title, String value) {
         return String.format("&a - %s:&f %s", title, value);
+    }
+
+    public static void sendVersionCheck(CommandSource source) {
+        String currentVersion = VelocityUtils.getInstance().getCurrentVersion();
+        String newVersion = VelocityUtils.getInstance().getNewVersion();
+
+        ChatUtil.sendMessage(source, String.format("%s&aThere is a newer plugin version available: &f%s&a, you're on: &f%s", ChatPrefix, newVersion, currentVersion));
     }
 }

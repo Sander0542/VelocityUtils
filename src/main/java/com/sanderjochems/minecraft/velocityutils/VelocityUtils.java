@@ -3,9 +3,12 @@ package com.sanderjochems.minecraft.velocityutils;
 import com.google.inject.Inject;
 import com.sanderjochems.minecraft.velocityutils.commands.*;
 import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
+import com.sanderjochems.minecraft.velocityutils.listeners.VersionCheckListener;
+import com.sanderjochems.minecraft.velocityutils.listeners.common.BaseListener;
 import com.sanderjochems.minecraft.velocityutils.tasks.VersionCheckerTask;
 import com.sanderjochems.minecraft.velocityutils.tasks.common.BaseTask;
 import com.velocitypowered.api.command.CommandManager;
+import com.velocitypowered.api.event.EventManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.plugin.Plugin;
@@ -36,6 +39,7 @@ public class VelocityUtils {
     private final Logger logger;
     private final Metrics.Factory metricsFactory;
     private final List<BaseCommand> commands = new ArrayList<>();
+    private final List<BaseListener> listeners = new ArrayList<>();
     private final Map<BaseTask, Duration> tasks = new HashMap<>();
 
     private String newestVersion = null;
@@ -66,7 +70,11 @@ public class VelocityUtils {
         Metrics metrics = this.metricsFactory.make(this, Constants.BStatsPluginId);
 
         this.registerCommands(this.server.getCommandManager());
+        this.registerListeners(this.server.getEventManager());
         this.registerTasks(this.server.getScheduler());
+
+        this.logger.info("{} Enabled.", Constants.PluginName);
+        this.logger.info("{} Version {}", Constants.PluginName, this.getCurrentVersion());
     }
 
     public void setNewestVersion(String newestVersion) {
@@ -101,6 +109,18 @@ public class VelocityUtils {
 
         for (BaseCommand command : this.commands) {
             command.register(commandManager);
+        }
+    }
+
+    public List<BaseListener> getListeners() {
+        return this.listeners;
+    }
+
+    private void registerListeners(final EventManager eventManager) {
+        this.listeners.add(new VersionCheckListener(this.server));
+
+        for (BaseListener listener : this.listeners) {
+            eventManager.register(this, listener);
         }
     }
 
