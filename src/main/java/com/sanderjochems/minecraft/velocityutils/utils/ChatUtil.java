@@ -1,6 +1,10 @@
 package com.sanderjochems.minecraft.velocityutils.utils;
 
+import com.sanderjochems.minecraft.velocityutils.Constants;
+import com.sanderjochems.minecraft.velocityutils.VelocityUtils;
+import com.sanderjochems.minecraft.velocityutils.helpers.HelpHelper;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 import java.util.Map;
@@ -15,6 +19,14 @@ public class ChatUtil {
         for (Map.Entry<String, String> entry : items.entrySet()) {
             ChatUtil.sendMessage(source, formatItem(entry));
         }
+    }
+
+    public static void sendHelp(SimpleCommand.Invocation invocation) {
+        Map<String, String> commandHelp = HelpHelper.commands(invocation);
+
+        if (commandHelp.isEmpty()) return;
+
+        ChatUtil.sendList(invocation.source(), String.format("%s Help", Constants.PluginName), commandHelp);
     }
 
     private static String formatItem(Map.Entry<String, String> entry) {

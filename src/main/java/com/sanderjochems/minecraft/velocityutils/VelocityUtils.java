@@ -15,8 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Plugin(
-        id = "velocity-utils",
-        name = "VelocityUtils",
+        id = Constants.PluginId,
+        name = Constants.PluginName,
         version = "@version@",
         description = "Useful utilities for a Velocity Minecraft server",
         url = "https://sanderjochems.com/",
@@ -30,7 +30,6 @@ public class VelocityUtils {
     private final Metrics.Factory metricsFactory;
     private final List<BaseCommand> commands = new ArrayList<>();
 
-    private static final int BStatsPluginId = 11571;
 
     public static VelocityUtils getInstance() {
         return Instance;
@@ -49,7 +48,7 @@ public class VelocityUtils {
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
-        Metrics metrics = this.metricsFactory.make(this, BStatsPluginId);
+        Metrics metrics = this.metricsFactory.make(this, Constants.BStatsPluginId);
     }
 
     public List<BaseCommand> getCommands() {
