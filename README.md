@@ -23,7 +23,7 @@ The releases section of this repository contains all the releases of this plugin
 
 ## Links
 - [Velocity Forums](https://forums.velocitypowered.com/t/velocity-utils-useful-commands-like-send-and-find/825?u=sander0542)
-- [BStats](https://bstats.org/plugin/velocity/VelocityUtils/11571)
+- [bStats](https://bstats.org/plugin/velocity/VelocityUtils/11571)
 - [Wiki](https://github.com/Sander0542/VelocityUtils/wiki)
 
 ## License
