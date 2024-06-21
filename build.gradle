@@ -23,9 +23,6 @@ gitVersioning.apply {
     }
 }
 
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
-
 repositories {
     mavenCentral()
     maven {
@@ -55,13 +52,11 @@ shadowJar {
     archiveClassifier.set('')
 }
 
-import org.apache.tools.ant.filters.ReplaceTokens
-
 task processSources(type: Sync) {
     from sourceSets.main.java.srcDirs
     inputs.property 'version', version
-    filter ReplaceTokens, tokens: [version: version]
-    into "$buildDir/src"
+    filter org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: version]
+    into layout.buildDirectory.dir("src")
 }
 
 compileJava.source = processSources.outputs
