@@ -11,6 +11,7 @@ import com.velocitypowered.api.proxy.ProxyServer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.net.URI;
 import java.net.URL;
 
 public class VersionCheckerTask extends BaseTask {
@@ -52,7 +53,7 @@ public class VersionCheckerTask extends BaseTask {
     private JsonObject getApiResponse() throws Exception {
         BufferedReader reader = null;
         try {
-            URL url = new URL(Constants.VersionApi);
+            URL url = new URI(Constants.VersionApi).toURL();
             reader = new BufferedReader(new InputStreamReader(url.openStream()));
 
             StringBuilder buffer = new StringBuilder();

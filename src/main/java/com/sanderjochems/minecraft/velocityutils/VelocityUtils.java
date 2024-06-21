@@ -1,6 +1,7 @@
 package com.sanderjochems.minecraft.velocityutils;
 
 import com.google.inject.Inject;
+import com.sanderjochems.minecraft.velocityutils.Version;
 import com.sanderjochems.minecraft.velocityutils.commands.*;
 import com.sanderjochems.minecraft.velocityutils.commands.common.BaseCommand;
 import com.sanderjochems.minecraft.velocityutils.listeners.VersionCheckListener;
@@ -27,7 +28,7 @@ import java.util.Map;
 @Plugin(
         id = Constants.PluginId,
         name = Constants.PluginName,
-        version = "@version@",
+        version = Version.VERSION,
         description = "Useful utilities for a Velocity Minecraft server",
         url = "https://sanderjochems.com/",
         authors = {"Sander Jochems"}

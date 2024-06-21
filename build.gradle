@@ -1,30 +1,11 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '8.1.1'
-    id 'me.qoomon.git-versioning' version '6.4.3'
+    id 'com.palantir.git-version' version '3.1.0'
 }
 
-String packagePath = 'com.sanderjochems.minecraft'
-group = packagePath
-version = '0.0.0'
-
-gitVersioning.apply {
-    refs {
-        branch('.+') {
-            version = '${ref}-SNAPSHOT'
-        }
-        tag('v(?<version>.*)') {
-            version = '${ref.version}'
-        }
-    }
-
-    rev {
-        version = '${commit}'
-    }
-}
-
-sourceCompatibility = '1.11'
-targetCompatibility = '1.11'
+group = 'com.sanderjochems.minecraft'
+version = gitVersion()
 
 repositories {
     mavenCentral()
@@ -50,18 +31,29 @@ dependencies {
 
 shadowJar {
     dependencies {
-        relocate('org.bstats', packagePath + '.dependencies.bstats')
+        relocate('org.bstats', group + '.dependencies.bstats')
     }
     archiveClassifier.set('')
 }
 
-import org.apache.tools.ant.filters.ReplaceTokens
+task versionFile {
+    def outputDir = layout.buildDirectory.dir("generated-sources/version").get().asFile
+    def outputFile = new File(outputDir, "Version.java")
 
-task processSources(type: Sync) {
-    from sourceSets.main.java.srcDirs
-    inputs.property 'version', version
-    filter ReplaceTokens, tokens: [version: version]
-    into "$buildDir/src"
+    inputs.property('version', version)
+
+    doLast {
+        outputFile.parentFile.mkdirs()
+        outputFile.text = """
+            package com.sanderjochems.minecraft.velocityutils;
+            
+            public class Version {
+                public static final String VERSION = "${version}";
+            }
+        """.stripIndent()
+    }
 }
 
-compileJava.source = processSources.outputs
+sourceSets.main.java.srcDirs += layout.buildDirectory.dir("generated-sources/version").get().asFile
+
+compileJava.dependsOn versionFile
