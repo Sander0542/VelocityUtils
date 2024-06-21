@@ -9,14 +9,17 @@ group = packagePath
 version = '0.0.0'
 
 gitVersioning.apply {
-    branch('main') {
-        version = '${version}-${commit.short}${dirty}'
+    refs {
+        branch('.+') {
+            version = '${ref}-SNAPSHOT'
+        }
+        tag('v(?<version>.*)') {
+            version = '${ref.version}'
+        }
     }
-    branch('dev') {
-        version = '${version}-${ref.slug}-${commit.short}${dirty}'
-    }
-    tag("v(?<version>.*)") {
-        version = "\${ref.version}"
+
+    rev {
+        version = '${commit}'
     }
 }
 
