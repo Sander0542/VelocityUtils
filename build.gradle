@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'com.github.johnrengelman.shadow' version '5.0.0'
-    id 'me.qoomon.git-versioning' version '4.2.0'
+    id 'me.qoomon.git-versioning' version '6.4.3'
 }
 
 String packagePath = 'com.sanderjochems.minecraft'
@@ -9,17 +9,17 @@ group = packagePath
 version = '0.0.0'
 
 gitVersioning.apply {
-    branch {
-        pattern = 'main'
-        versionFormat = '${version}-${commit.short}${dirty}'
+    refs {
+        branch('.+') {
+            version = '${ref}-SNAPSHOT'
+        }
+        tag('v(?<version>.*)') {
+            version = '${ref.version}'
+        }
     }
-    branch {
-        pattern = 'dev'
-        versionFormat = '${version}-${branch.slug}-${commit.short}${dirty}'
-    }
-    tag {
-        pattern = 'v(?<tagVersion>[0-9].*)'
-        versionFormat = '${tagVersion}'
+
+    rev {
+        version = '${commit}'
     }
 }
 
