@@ -14,7 +14,7 @@ public class VersionCheckListener extends BaseListener {
 
     @Subscribe
     public void onPostLogin(PostLoginEvent event) {
-        if (VelocityUtils.getInstance().isNewerVersionAvailable()) {
+        if (event.getPlayer().hasPermission("velocityutils.version") && VelocityUtils.getInstance().isNewerVersionAvailable()) {
             ChatUtil.sendVersionCheck(event.getPlayer());
         }
     }
