@@ -106,6 +106,7 @@ public class VelocityUtils {
         this.commands.add(new SendCommand(VelocityUtils.this.server));
         this.commands.add(new ServerInfoCommand(VelocityUtils.this.server));
         this.commands.add(new MainCommand(VelocityUtils.this.server));
+        this.commands.add(new StopCommand(VelocityUtils.this.server));
 
         for (BaseCommand command : this.commands) {
             command.register(commandManager);

@@ -5,15 +5,21 @@ import com.sanderjochems.minecraft.velocityutils.VelocityUtils;
 import com.sanderjochems.minecraft.velocityutils.helpers.HelpHelper;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.command.SimpleCommand;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 public class ChatUtil {
     public static final String ChatPrefix = String.format("&2[&a%s&2]&r ", Constants.PluginName);
 
+    public static TextComponent createComponent(String message) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+    }
+
     public static void sendMessage(CommandSource source, String message) {
-        source.sendMessage(LegacyComponentSerializer.legacyAmpersand().deserialize(message));
+        source.sendMessage(createComponent(message));
     }
 
     public static void sendList(CommandSource source, String title, Map<String, String> items) {
