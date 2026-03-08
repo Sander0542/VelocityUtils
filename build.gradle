@@ -29,8 +29,8 @@ targetCompatibility = JavaVersion.VERSION_17
 repositories {
     mavenCentral()
     maven {
-        name = 'velocitypowered-repo'
-        url = 'https://repo.velocitypowered.com/releases/'
+        name = 'papermc'
+        url = 'https://repo.papermc.io/repository/maven-public/'
     }
     maven {
         name = 'minecraft-libraries'
@@ -43,9 +43,9 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'com.velocitypowered:velocity-api:3.1.1'
+    compileOnly 'com.velocitypowered:velocity-api:3.5.0-SNAPSHOT'
     implementation 'org.bstats:bstats-velocity:3.1.0'
-    annotationProcessor 'com.velocitypowered:velocity-api:3.1.1'
+    annotationProcessor 'com.velocitypowered:velocity-api:3.5.0-SNAPSHOT'
 }
 
 shadowJar {
